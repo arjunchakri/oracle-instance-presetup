@@ -1,11 +1,5 @@
 #!/bin/bash
 
-# Define container names
-C_PORTAINER="portainer"
-C_NEXTCLOUD="nextcloud"
-C_WEBTOP="webtop"
-C_OPENWEBUI="open-webui"
-
 echo "--- 1. Creating Docker Volumes ---"
 docker volume create portainer_data
 docker volume create nextcloud_data
@@ -13,12 +7,12 @@ docker volume create webtop_data
 docker volume create open-webui_data
 
 echo "--- 2. Cleaning up old containers (if they exist) ---"
-docker rm -f $C_PORTAINER $C_NEXTCLOUD $C_WEBTOP $C_OPENWEBUI 2>/dev/null || true
+docker rm -f portainer nextcloud webtop open-webui 2>/dev/null || true
 
 echo "--- 3. Starting Portainer ---"
 # Accessible at https://<IP>:9443
 docker run -d \
-  --name $C_PORTAINER \
+  --name portainer \
   --restart=always \
   -p 9443:9443 \
   -v /etc/localtime:/etc/localtime:ro \
@@ -29,7 +23,7 @@ docker run -d \
 echo "--- 4. Starting Nextcloud ---"
 # Accessible at http://<IP>:8080
 docker run -d \
-  --name $C_NEXTCLOUD \
+  --name nextcloud \
   --restart=always \
   -p 8080:80 \
   -v nextcloud_data:/var/www/html \
@@ -39,7 +33,7 @@ docker run -d \
 echo "--- 5. Starting Webtop (Ubuntu XFCE) ---"
 # Accessible at http://<IP>:3000
 docker run -d \
-  --name $C_WEBTOP \
+  --name webtop \
   --restart=unless-stopped \
   -p 3000:3000 \
   --security-opt seccomp=unconfined \
@@ -55,7 +49,7 @@ echo "--- 6. Starting Open WebUI (for Ollama) ---"
 # Accessible at http://<IP>:3001
 # Note: --add-host allows the container to talk to Ollama running on the host machine
 docker run -d \
-  --name $C_OPENWEBUI \
+  --name open-webui \
   --restart=always \
   -p 3001:8080 \
   --add-host=host.docker.internal:host-gateway \
