@@ -27,6 +27,7 @@ docker run -d \
   --restart=always \
   -p 8080:80 \
   -v nextcloud_data:/var/www/html \
+  -v /home/ubuntu/Downloads:/mnt/host_downloads \
   -e SQLITE_DATABASE=nextcloud \
   nextcloud:latest
 
