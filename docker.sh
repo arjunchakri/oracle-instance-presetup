@@ -25,7 +25,7 @@ echo "--- 4. Starting Nextcloud ---"
 docker run -d \
   --name nextcloud \
   --restart=always \
-  -p 8080:80 \
+  -p 3001:80 \
   -v nextcloud_data:/var/www/html \
   -v /home/ubuntu/Downloads:/mnt/host_downloads \
   -e SQLITE_DATABASE=nextcloud \
@@ -36,7 +36,7 @@ echo "--- 5. Starting Webtop (Ubuntu XFCE) ---"
 docker run -d \
   --name webtop \
   --restart=unless-stopped \
-  -p 3000:3000 \
+  -p 3002:3000 \
   --security-opt seccomp=unconfined \
   --shm-size="1gb" \
   -e PUID=$(id -u) \
@@ -52,7 +52,7 @@ echo "--- 6. Starting Open WebUI (for Ollama) ---"
 docker run -d \
   --name open-webui \
   --restart=always \
-  -p 3001:8080 \
+  -p 3000:8080 \
   --add-host=host.docker.internal:host-gateway \
   -e OLLAMA_BASE_URL=http://host.docker.internal:11434 \
   -v open-webui_data:/app/backend/data \
